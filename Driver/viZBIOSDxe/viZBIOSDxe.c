@@ -99,27 +99,41 @@ STATIC VIZBIOS_PROTOCOL mViZBIOSProtocol = {
 EFI_STATUS
 EFIAPI
 viZBIOSDxeInitialize (
-	IN EFI_HANDLE ImageHandle, 
-	IN EFI_SYSTEM_TABLE *SystemTable
-	)
+  IN EFI_HANDLE        ImageHandle,
+  IN EFI_SYSTEM_TABLE  *SystemTable
+  )
 {
-	DEBUG((EFI_D_INFO, "Entering viZBIOS Setup\n"));
+  EFI_STATUS Status;
+  EFI_HANDLE ViZBIOSHandle;
 
-	EFI_GRAPHICS_OUTPUT_PROTOCOL *Gop;
-	Status = gBS->LocateProtocol(
-		&gEfiGraphicsOutputProtocolGuid,
-		NULL,
-		(VOID**)&Gop
-	);
+  DEBUG ((EFI_D_INFO, "Entering viZBIOS Setup\n"));
 
-	if (EFI_ERROR(Status)) {
-		return Status;
-	}
+  Status = gBS->LocateProtocol (
+                  &gEfiGraphicsOutputProtocolGuid,
+                  NULL,
+                  (VOID **)&mViZBIOSGop
+                  );
 
-	return gBS->InstallProtocolInterface(
-		&ImageHandle,
-		&gViZBIOSProtocolGuid,
-		EFI_NATIVE_INTERFACE,
-		&mViZBIOSProtocol
-	);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((EFI_D_WARN, "GOP unavailable: %r\n", Status));
+    return Status;
+  }
+
+  ViZBIOSHandle = NULL;
+
+  Status = gBS->InstallMultipleProtocolInterfaces (
+                  &ViZBIOSHandle,
+                  &gViZBIOSProtocolGuid,
+                  &mViZBIOSProtocol,
+                  NULL
+                  );
+
+  if (EFI_ERROR (Status)) {
+    DEBUG ((EFI_D_ERROR, "Cannot install viZBIOS protocol: %r\n", Status));
+    return Status;
+  }
+
+  DEBUG ((EFI_D_INFO, "viZBIOS protocol installed successfully\n"));
+
+  return EFI_SUCCESS;
 }
