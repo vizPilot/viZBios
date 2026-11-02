@@ -55,10 +55,10 @@ struct _VIZBIOS_MENU {
 };
 
 VIZBIOS_MENU_ITEM MainMenu[] = {
-  { L"Boot Options", NULL },
-  { L"Device Info", NULL },
-  { L"Advanced", NULL },
-  { L"Exit", NULL }
+  { L"Boot Options", NULL, NULL },
+  { L"Device Info",  NULL, NULL },
+  { L"Advanced",    NULL, NULL },
+  { L"Exit",        NULL, NULL }
 };
 
 VOID ClearScreen(EFI_GRAPHICS_OUTPUT_PROTOCOL *Gop, UINT8 R, UINT8 G, UINT8 B)
@@ -106,13 +106,14 @@ viZBIOSDxeInitialize (
 {
   EFI_STATUS Status;
   EFI_HANDLE ViZBIOSHandle;
+  EFI_GRAPHICS_OUTPUT_PROTOCOL *Gop;
 
   DEBUG ((EFI_D_INFO, "Entering viZBIOS Setup\n"));
 
   Status = gBS->LocateProtocol (
                   &gEfiGraphicsOutputProtocolGuid,
                   NULL,
-                  (VOID **)&mViZBIOSGop
+                  (VOID **)&Gop
                   );
 
   if (EFI_ERROR (Status)) {
