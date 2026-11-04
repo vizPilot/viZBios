@@ -3,3 +3,5 @@
 
 [Components]
   viZBIOSPkg/Driver/viZBIOSDxe/viZBIOSDxe.inf
+
+  viZBIOSPkg/Applications/viZBIOSApp/viZBIOSApp.inf

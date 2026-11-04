@@ -1,0 +1,23 @@
+[Defines]
+  INF_VERSION    = 0x00010005
+  BASE_NAME      = viZBIOSApp
+  FILE_GUID      = 6F7A9C21-5D43-4E8B-91A2-3C6D7E8F104B
+  MODULE_TYPE    = UEFI_APPLICATION
+  VERSION_STRING = 1.0
+  ENTRY_POINT    = UefiMain
+
+[Sources]
+  viZBIOSApp.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  viZBIOSPkg/viZBios.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiLib
+  UefiBootServicesTableLib
+  DebugLib
+
+[Protocols]
+  gViZBIOSProtocolGuid
